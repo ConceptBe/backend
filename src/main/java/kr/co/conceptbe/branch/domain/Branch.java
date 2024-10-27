@@ -61,8 +61,8 @@ public class Branch {
         return Objects.isNull(parentBranch) || id.equals(parentBranch.getId());
     }
 
-    public boolean isChildBranch() {
-        return !isParentBranch();
+    public boolean isChildBranch(Branch branch) {
+        return !isParentBranch() && branch.id.equals(parentBranch.id);
     }
 
     public boolean isInclude(Branch branch) {

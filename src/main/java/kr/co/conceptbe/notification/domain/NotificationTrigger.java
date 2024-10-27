@@ -4,9 +4,9 @@ import kr.co.conceptbe.branch.domain.Branch;
 import kr.co.conceptbe.idea.domain.Idea;
 import kr.co.conceptbe.idea.domain.IdeaBranch;
 import kr.co.conceptbe.idea.domain.IdeaPurpose;
-import kr.co.conceptbe.member.domain.IdeaNotificationSetting;
-import kr.co.conceptbe.member.domain.vo.NotificationSettingBranch;
-import kr.co.conceptbe.member.domain.vo.NotificationSettingPurpose;
+import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
+import kr.co.conceptbe.notification_setting.domain.vo.NotificationSettingBranch;
+import kr.co.conceptbe.notification_setting.domain.vo.NotificationSettingPurpose;
 import kr.co.conceptbe.purpose.domain.Purpose;
 import org.springframework.stereotype.Component;
 
