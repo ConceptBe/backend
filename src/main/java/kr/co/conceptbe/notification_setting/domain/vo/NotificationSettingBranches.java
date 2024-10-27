@@ -3,6 +3,7 @@ package kr.co.conceptbe.notification_setting.domain.vo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import java.util.Set;
 import java.util.stream.Collectors;
 import kr.co.conceptbe.branch.domain.Branch;
 import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
@@ -33,7 +34,7 @@ public class NotificationSettingBranches {
 
     public static NotificationSettingBranches of(
             IdeaNotificationSetting ideaNotificationSetting,
-            List<Branch> branches
+            Set<Branch> branches
     ) {
         List<NotificationSettingBranch> notificationSettingBranches = branches.stream()
                 .map(branch -> NotificationSettingBranch.of(ideaNotificationSetting, branch))
@@ -42,7 +43,7 @@ public class NotificationSettingBranches {
         return new NotificationSettingBranches(notificationSettingBranches);
     }
 
-    public void update(IdeaNotificationSetting ideaNotificationSetting, List<Branch> branches) {
+    public void update(IdeaNotificationSetting ideaNotificationSetting, Set<Branch> branches) {
         notificationSettingBranches.clear();
         notificationSettingBranches.addAll(
             branches.stream()

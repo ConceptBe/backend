@@ -14,4 +14,10 @@ public record BranchResponse(
         return new BranchResponse(branch.getId(), branch.getName());
     }
 
+    public static BranchResponse createNotificationBranch(Branch branch) {
+        return new BranchResponse(
+            branch.getId(),
+            branch.getParentBranch().getName() + " - " + branch.getName()
+        );
+    }
 }

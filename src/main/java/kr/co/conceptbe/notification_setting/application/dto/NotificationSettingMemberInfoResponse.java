@@ -27,7 +27,7 @@ public record NotificationSettingMemberInfoResponse(
                 ideaNotificationSetting.getBranches()
                         .getNotificationSettingBranches()
                         .stream()
-                        .map(branch -> BranchResponse.from(branch.getBranch()))
+                        .map(branch -> BranchResponse.createNotificationBranch(branch.getBranch()))
                         .toList(),
                 ideaNotificationSetting.getCooperationWay()
         );

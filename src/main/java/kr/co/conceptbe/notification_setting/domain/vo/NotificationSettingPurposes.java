@@ -3,6 +3,7 @@ package kr.co.conceptbe.notification_setting.domain.vo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import java.util.Set;
 import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
 import kr.co.conceptbe.purpose.domain.Purpose;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class NotificationSettingPurposes {
 
     public static NotificationSettingPurposes of(
             IdeaNotificationSetting ideaNotificationSetting,
-            List<Purpose> purposes
+            Set<Purpose> purposes
     ) {
         List<NotificationSettingPurpose> notificationSettingPurposes = purposes.stream()
                 .map(purpose -> NotificationSettingPurpose.of(ideaNotificationSetting, purpose))
@@ -41,7 +42,7 @@ public class NotificationSettingPurposes {
         return new NotificationSettingPurposes(notificationSettingPurposes);
     }
 
-    public void update(IdeaNotificationSetting ideaNotificationSetting, List<Purpose> purposes) {
+    public void update(IdeaNotificationSetting ideaNotificationSetting, Set<Purpose> purposes) {
         notificationSettingPurposes.clear();
         notificationSettingPurposes.addAll(
             purposes.stream()

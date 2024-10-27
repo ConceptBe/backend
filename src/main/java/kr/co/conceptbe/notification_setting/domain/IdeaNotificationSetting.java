@@ -2,11 +2,15 @@ package kr.co.conceptbe.notification_setting.domain;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Set;
 import kr.co.conceptbe.branch.domain.Branch;
+import kr.co.conceptbe.branch.exception.InvalidBranchLengthException;
 import kr.co.conceptbe.common.entity.base.BaseTimeEntity;
 import kr.co.conceptbe.idea.domain.vo.CooperationWay;
 import kr.co.conceptbe.notification_setting.domain.vo.NotificationSettingBranches;
 import kr.co.conceptbe.notification_setting.domain.vo.NotificationSettingPurposes;
+import kr.co.conceptbe.notification_setting.exception.InvalidBranchException;
+import kr.co.conceptbe.notification_setting.exception.InvalidPurposeException;
 import kr.co.conceptbe.purpose.domain.Purpose;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,17 +45,20 @@ public class IdeaNotificationSetting extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CooperationWay cooperationWay;
 
-    public IdeaNotificationSetting(Long memberId, CooperationWay cooperationWay) {
+    private IdeaNotificationSetting(Long memberId, CooperationWay cooperationWay) {
         this.memberId = memberId;
         this.cooperationWay = cooperationWay;
     }
 
     public static IdeaNotificationSetting of(
             Long memberId,
-            List<Branch> branches,
-            List<Purpose> purposes,
+            Set<Branch> branches,
+            Set<Purpose> purposes,
             CooperationWay cooperationWay
     ) {
+        validatePurpose(purposes);
+        validateBranch(branches);
+
         IdeaNotificationSetting ideaNotificationSetting = new IdeaNotificationSetting(
                 memberId,
                 cooperationWay
@@ -63,13 +70,28 @@ public class IdeaNotificationSetting extends BaseTimeEntity {
     }
 
     public void update(
-            List<Branch> branches,
-            List<Purpose> purposes,
+            Set<Branch> branches,
+            Set<Purpose> purposes,
             CooperationWay cooperationWay
     ) {
+        validatePurpose(purposes);
+        validateBranch(branches);
+
         this.branches.update(this, branches);
         this.purposes.update(this, purposes);
         this.cooperationWay = cooperationWay;
+    }
+
+    private static void validatePurpose(Set<Purpose> purposes) {
+        if (purposes.isEmpty()) {
+            throw new InvalidPurposeException();
+        }
+    }
+
+    private static void validateBranch(Set<Branch> branches) {
+        if (branches.isEmpty() || branches.size() > 10) {
+            throw new InvalidBranchException();
+        }
     }
 
 }
