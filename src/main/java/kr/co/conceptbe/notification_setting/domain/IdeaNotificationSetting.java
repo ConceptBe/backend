@@ -1,6 +1,7 @@
 package kr.co.conceptbe.notification_setting.domain;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import kr.co.conceptbe.branch.domain.Branch;
@@ -52,13 +53,10 @@ public class IdeaNotificationSetting extends BaseTimeEntity {
 
     public static IdeaNotificationSetting of(
             Long memberId,
-            Set<Branch> branches,
-            Set<Purpose> purposes,
+            HashSet<Branch> branches,
+            HashSet<Purpose> purposes,
             CooperationWay cooperationWay
     ) {
-        validatePurpose(purposes);
-        validateBranch(branches);
-
         IdeaNotificationSetting ideaNotificationSetting = new IdeaNotificationSetting(
                 memberId,
                 cooperationWay
@@ -70,28 +68,13 @@ public class IdeaNotificationSetting extends BaseTimeEntity {
     }
 
     public void update(
-            Set<Branch> branches,
-            Set<Purpose> purposes,
+            HashSet<Branch> branches,
+            HashSet<Purpose> purposes,
             CooperationWay cooperationWay
     ) {
-        validatePurpose(purposes);
-        validateBranch(branches);
-
         this.branches.update(this, branches);
         this.purposes.update(this, purposes);
         this.cooperationWay = cooperationWay;
-    }
-
-    private static void validatePurpose(Set<Purpose> purposes) {
-        if (purposes.isEmpty()) {
-            throw new InvalidPurposeException();
-        }
-    }
-
-    private static void validateBranch(Set<Branch> branches) {
-        if (branches.isEmpty() || branches.size() > 10) {
-            throw new InvalidBranchException();
-        }
     }
 
 }

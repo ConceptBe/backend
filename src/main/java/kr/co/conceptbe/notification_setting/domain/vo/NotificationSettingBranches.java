@@ -3,10 +3,14 @@ package kr.co.conceptbe.notification_setting.domain.vo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import kr.co.conceptbe.branch.domain.Branch;
 import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
+import kr.co.conceptbe.notification_setting.exception.InvalidBranchException;
+import kr.co.conceptbe.notification_setting.exception.InvalidPurposeException;
+import kr.co.conceptbe.purpose.domain.Purpose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,8 +38,10 @@ public class NotificationSettingBranches {
 
     public static NotificationSettingBranches of(
             IdeaNotificationSetting ideaNotificationSetting,
-            Set<Branch> branches
+            HashSet<Branch> branches
     ) {
+        validateBranch(branches);
+
         List<NotificationSettingBranch> notificationSettingBranches = branches.stream()
                 .map(branch -> NotificationSettingBranch.of(ideaNotificationSetting, branch))
                 .toList();
@@ -43,7 +49,12 @@ public class NotificationSettingBranches {
         return new NotificationSettingBranches(notificationSettingBranches);
     }
 
-    public void update(IdeaNotificationSetting ideaNotificationSetting, Set<Branch> branches) {
+    public void update(
+            IdeaNotificationSetting ideaNotificationSetting,
+            HashSet<Branch> branches
+    ) {
+        validateBranch(branches);
+
         notificationSettingBranches.clear();
         notificationSettingBranches.addAll(
             branches.stream()
@@ -51,4 +62,11 @@ public class NotificationSettingBranches {
                 .toList()
         );
     }
+
+    private static void validateBranch(HashSet<Branch> branches) {
+        if (branches.isEmpty() || branches.size() > 10) {
+            throw new InvalidBranchException();
+        }
+    }
+
 }

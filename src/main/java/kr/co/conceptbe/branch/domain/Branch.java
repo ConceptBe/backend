@@ -8,11 +8,13 @@ import java.util.Objects;
 
 import kr.co.conceptbe.branch.exception.EmptyBranchNameException;
 import kr.co.conceptbe.branch.exception.InvalidBranchLengthException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = PROTECTED)
 public class Branch {
 
