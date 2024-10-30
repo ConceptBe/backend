@@ -8,4 +8,6 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
 
     List<Branch> findByIdIn(List<Long> ids);
 
+    List<Branch> findByParentBranchIsNull();
+
 }

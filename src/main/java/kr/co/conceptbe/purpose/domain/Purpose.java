@@ -12,11 +12,13 @@ import java.util.Objects;
 
 import kr.co.conceptbe.purpose.exception.EmptyPurposeNameException;
 import kr.co.conceptbe.purpose.exception.InvalidPurposeLengthException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = PROTECTED)
 public class Purpose {
 

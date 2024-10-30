@@ -42,9 +42,10 @@ public class IdeaBranch {
         return branch.isParentBranch();
     }
 
-    public boolean isChildBranch() {
-        return branch.isChildBranch();
-    }
+    // TODO
+//    public boolean isChildBranch() {
+//        return branch.isChildBranch();
+//    }
 
     public IdeaBranch getIdeaParentBranch() {
         Branch parentBranch = branch.getParentBranch();

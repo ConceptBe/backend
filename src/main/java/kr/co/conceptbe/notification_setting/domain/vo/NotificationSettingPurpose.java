@@ -1,7 +1,7 @@
-package kr.co.conceptbe.member.domain.vo;
+package kr.co.conceptbe.notification_setting.domain.vo;
 
 import jakarta.persistence.*;
-import kr.co.conceptbe.member.domain.IdeaNotificationSetting;
+import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
 import kr.co.conceptbe.purpose.domain.Purpose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
