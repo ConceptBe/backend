@@ -11,6 +11,7 @@ import kr.co.conceptbe.purpose.domain.Purpose;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class NotificationTrigger {
@@ -20,6 +21,7 @@ public class NotificationTrigger {
             List<IdeaNotificationSetting> notificationSettings
     ) {
         return notificationSettings.stream()
+                .filter(setting -> !Objects.equals(setting.getMemberId(), idea.getCreator().getId()))
                 .filter(notificationSetting -> isSuitToMeIdea(idea, notificationSetting))
                 .map(notificationSetting -> IdeaNotification.withIdea(idea))
                 .toList();

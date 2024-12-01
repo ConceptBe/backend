@@ -1,6 +1,7 @@
 package kr.co.conceptbe.image.application;
 
 import java.util.List;
+
 import kr.co.conceptbe.image.application.response.ImageResponse;
 import kr.co.conceptbe.image.domain.Image;
 import kr.co.conceptbe.image.domain.ImageChecker;
@@ -29,48 +30,48 @@ public class ImageService {
 
     private void uploadImages(Long ideaId, List<MultipartFile> files) {
         files.stream()
-            .map(s3Client::upload)
-            .map(imageUrl -> new Image(ideaId, imageUrl))
-            .forEach(imageRepository::save);
+                .map(s3Client::upload)
+                .map(imageUrl -> new Image(ideaId, imageUrl))
+                .forEach(imageRepository::save);
     }
 
     public void update(
-        Long ideaId,
-        List<Long> imageIds,
-        List<MultipartFile> additionFiles
+            Long ideaId,
+            List<Long> imageIds,
+            List<MultipartFile> additionFiles
     ) {
         List<Image> imagesToDeleted = getImagesToDeleted(ideaId, imageIds, additionFiles.size());
         imagesToDeleted.forEach(this::deleteImage);
         additionFiles.stream()
-            .map(s3Client::upload)
-            .map(imageUrl -> new Image(ideaId, imageUrl))
-            .forEach(imageRepository::save);
+                .map(s3Client::upload)
+                .map(imageUrl -> new Image(ideaId, imageUrl))
+                .forEach(imageRepository::save);
     }
 
     private List<Image> getImagesToDeleted(
-        Long ideaId,
-        List<Long> imageIds,
-        int additionFilesSize
+            Long ideaId,
+            List<Long> imageIds,
+            int additionFilesSize
     ) {
         List<Image> savedImages = imageRepository.findAllByIdeaId(ideaId);
         List<Long> imageIdsToDeleted = imageChecker.getImageIdsToDeleted(
-            extractIds(savedImages),
-            imageIds
+                extractIds(savedImages),
+                imageIds
         );
         imageChecker.validateTotalImageSize(
-            savedImages.size(),
-            imageIdsToDeleted.size(),
-            additionFilesSize
+                savedImages.size(),
+                imageIdsToDeleted.size(),
+                additionFilesSize
         );
         return savedImages.stream()
-            .filter(image -> imageIdsToDeleted.contains(image.getId()))
-            .toList();
+                .filter(image -> imageIdsToDeleted.contains(image.getId()))
+                .toList();
     }
 
     private List<Long> extractIds(List<Image> savedImages) {
         return savedImages.stream()
-            .map(Image::getId)
-            .toList();
+                .map(Image::getId)
+                .toList();
     }
 
     private void deleteImage(Image image) {
@@ -80,9 +81,9 @@ public class ImageService {
 
     public List<ImageResponse> getImageResponses(Long ideaId) {
         return imageRepository.findAllByIdeaId(ideaId)
-            .stream()
-            .map(image -> ImageResponse.of(image, cloudFrontUrl))
-            .toList();
+                .stream()
+                .map(image -> ImageResponse.of(image, cloudFrontUrl))
+                .toList();
     }
 
 }
