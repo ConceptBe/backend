@@ -11,7 +11,7 @@ public interface NotificationRepository extends JpaRepository<IdeaNotification, 
     @Query(value = """
             SELECT *
             FROM idea_notification
-            WHERE userId = :memberId and id < :cursorId
+            WHERE member_id = :memberId and id < :cursorId
             LIMIT :limit
             """, nativeQuery = true)
     List<IdeaNotification> findAllNotifications(Long memberId, Long cursorId, Long limit);
