@@ -22,7 +22,7 @@ public record NotificationResponse(
                 notification.getIdeaId(),
                 notification.getTitle(),
                 notification.getCreatedAt().toString(),
-                notification.getBranches()
+                ideaBranches
         );
     }
 

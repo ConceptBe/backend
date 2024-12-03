@@ -4,10 +4,12 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import kr.co.conceptbe.auth.presentation.dto.AuthCredentials;
 import kr.co.conceptbe.comment.dto.CommentParentResponse;
 import kr.co.conceptbe.common.auth.Auth;
@@ -49,37 +51,37 @@ public class IdeaController implements IdeaApi {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> addIdea(
-        @Parameter(hidden = true) @Auth AuthCredentials auth,
-        @RequestPart IdeaRequest request,
-        @RequestPart(required = false) List<MultipartFile> images
+            @Parameter(hidden = true) @Auth AuthCredentials auth,
+            @RequestPart IdeaRequest request,
+            @RequestPart(required = false) List<MultipartFile> images
     ) {
         Long savedId = ideaService.save(
-            auth,
-            request,
-            Optional.ofNullable(images)
-                .orElseGet(Collections::emptyList)
+                auth,
+                request,
+                Optional.ofNullable(images)
+                        .orElseGet(Collections::emptyList)
         );
 
         return ResponseEntity.created(URI.create("/ideas/" + savedId))
-            .build();
+                .build();
     }
 
     @PutMapping(value = "/{id}", consumes = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<Void> modifyIdea(
-        @Parameter(hidden = true) @Auth AuthCredentials auth,
-        @RequestPart IdeaUpdateRequest request,
-        @PathVariable Long id,
-        @RequestPart(required = false) List<MultipartFile> images
+            @Parameter(hidden = true) @Auth AuthCredentials auth,
+            @RequestPart IdeaUpdateRequest request,
+            @PathVariable Long id,
+            @RequestPart(required = false) List<MultipartFile> images
     ) {
         ideaService.updateIdea(
-            auth,
-            id,
-            request,
-            Optional.ofNullable(images)
-                .orElseGet(Collections::emptyList)
+                auth,
+                id,
+                request,
+                Optional.ofNullable(images)
+                        .orElseGet(Collections::emptyList)
         );
 
         return ResponseEntity.noContent().build();
@@ -87,8 +89,8 @@ public class IdeaController implements IdeaApi {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeIdea(
-        @Parameter(hidden = true) @Auth AuthCredentials auth,
-        @PathVariable Long id
+            @Parameter(hidden = true) @Auth AuthCredentials auth,
+            @PathVariable Long id
     ) {
         ideaService.deleteIdea(auth, id);
 
@@ -104,46 +106,46 @@ public class IdeaController implements IdeaApi {
 
     @GetMapping
     public ResponseEntity<List<IdeaResponse>> findAll(
-        @Parameter(hidden = true) @OptionalAuth AuthCredentials authCredentials,
-        @RequestParam int page,
-        @RequestParam int size,
-        @RequestParam(required = false) List<Long> branchIds,
-        @RequestParam(required = false) List<Long> purposeIds,
-        @RequestParam(required = false) String cooperationWay,
-        @RequestParam(required = false) Long region,
-        @RequestParam(required = false) List<Long> skillCategoryIds
+            @Parameter(hidden = true) @OptionalAuth AuthCredentials authCredentials,
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) List<Long> branchIds,
+            @RequestParam(required = false) List<Long> purposeIds,
+            @RequestParam(required = false) String cooperationWay,
+            @RequestParam(required = false) Long region,
+            @RequestParam(required = false) List<Long> skillCategoryIds
     ) {
         Pageable pageable = PageRequest.of(page, size);
         FilteringRequest filteringRequest = new FilteringRequest(
-            branchIds,
-            purposeIds,
-            cooperationWay,
-            region,
-            skillCategoryIds
+                branchIds,
+                purposeIds,
+                cooperationWay,
+                region,
+                skillCategoryIds
         );
         List<IdeaResponse> responses = ideaService.findAll(authCredentials, filteringRequest,
-            pageable);
+                pageable);
 
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/best")
     public ResponseEntity<List<BestIdeaResponse>> findBestIdeas(
-        @RequestParam int page,
-        @RequestParam int size,
-        @RequestParam(required = false) List<Long> branchIds,
-        @RequestParam(required = false) List<Long> purposeIds,
-        @RequestParam(required = false) String cooperationWay,
-        @RequestParam(required = false) Long region,
-        @RequestParam(required = false) List<Long> skillCategoryIds
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) List<Long> branchIds,
+            @RequestParam(required = false) List<Long> purposeIds,
+            @RequestParam(required = false) String cooperationWay,
+            @RequestParam(required = false) Long region,
+            @RequestParam(required = false) List<Long> skillCategoryIds
     ) {
         Pageable pageable = PageRequest.of(page, size);
         FilteringRequest filteringRequest = new FilteringRequest(
-            branchIds,
-            purposeIds,
-            cooperationWay,
-            region,
-            skillCategoryIds
+                branchIds,
+                purposeIds,
+                cooperationWay,
+                region,
+                skillCategoryIds
         );
         List<BestIdeaResponse> responses = ideaService.findAllBestIdea(filteringRequest, pageable);
 
@@ -152,38 +154,38 @@ public class IdeaController implements IdeaApi {
 
     @GetMapping("/{ideaId}")
     public ResponseEntity<IdeaDetailResponse> getDetailIdeaResponse(
-        @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
-        @PathVariable(name = "ideaId") Long ideaId
+            @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
+            @PathVariable(name = "ideaId") Long ideaId
     ) {
         IdeaDetailResponse ideaDetailResponse = ideaService.getDetailIdeaResponse(
-            authCredentials.id(), ideaId);
+                authCredentials.id(), ideaId);
         return ResponseEntity.ok(ideaDetailResponse);
     }
 
     @GetMapping("/{ideaId}/comments")
     public ResponseEntity<List<CommentParentResponse>> getIdeaCommentResponse(
-        @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
-        @PageableDefault(sort = "createdAt") Pageable pageable,
-        @PathVariable(name = "ideaId") Long ideaId) {
+            @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
+            @PageableDefault(sort = "createdAt") Pageable pageable,
+            @PathVariable(name = "ideaId") Long ideaId) {
         List<CommentParentResponse> commentParentResponses = ideaService.getIdeaCommentResponse(
-            authCredentials.id(), ideaId, pageable);
+                authCredentials.id(), ideaId, pageable);
         return ResponseEntity.ok(commentParentResponses);
     }
 
     @PostMapping("/likes/{ideaId}")
     public ResponseEntity<Void> likesIdea(
-        @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
-        @PathVariable(name = "ideaId") Long ideaId
+            @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
+            @PathVariable(name = "ideaId") Long ideaId
     ) {
         Long id = ideaService.likesIdea(authCredentials.id(), ideaId);
         return ResponseEntity.created(URI.create("/ideas/" + id))
-            .build();
+                .build();
     }
 
     @DeleteMapping("/likes/{ideaId}")
     public ResponseEntity<Void> likesCancelIdea(
-        @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
-        @PathVariable(name = "ideaId") Long ideaId
+            @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
+            @PathVariable(name = "ideaId") Long ideaId
     ) {
         ideaService.likesCancelIdea(authCredentials.id(), ideaId);
         return ResponseEntity.noContent().build();
@@ -191,8 +193,8 @@ public class IdeaController implements IdeaApi {
 
     @GetMapping("/{ideaId}/hits")
     public ResponseEntity<List<IdeaHitResponse>> getIdeaHitsResponse(
-        @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
-        @PathVariable(name = "ideaId") Long ideaId
+            @Parameter(hidden = true) @Auth AuthCredentials authCredentials,
+            @PathVariable(name = "ideaId") Long ideaId
     ) {
         List<IdeaHitResponse> ideaCommentResponse = ideaService.getIdeaHitsResponse(ideaId);
         return ResponseEntity.ok(ideaCommentResponse);

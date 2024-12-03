@@ -205,7 +205,6 @@ public class Idea extends BaseTimeEntity {
         List<IdeaBranch> ideaBranches = branches.getIdeaBranches();
 
         return ideaBranches.stream()
-                .filter(IdeaBranch::isParentBranch)
                 .collect(groupingBy(IdeaBranch::getIdeaParentBranch, LinkedHashMap::new, toList()));
     }
 }
