@@ -23,7 +23,7 @@ public class NotificationTrigger {
         return notificationSettings.stream()
                 .filter(setting -> !Objects.equals(setting.getMemberId(), idea.getCreator().getId()))
                 .filter(notificationSetting -> isSuitToMeIdea(idea, notificationSetting))
-                .map(notificationSetting -> IdeaNotification.withIdea(idea))
+                .map(notificationSetting -> IdeaNotification.withIdea(idea, notificationSetting))
                 .toList();
     }
 
