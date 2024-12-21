@@ -1,8 +1,6 @@
 package kr.co.conceptbe.notification.domain.repository;
 
-import java.lang.ScopedValue;
 import java.util.Optional;
-import javax.management.Notification;
 import kr.co.conceptbe.notification.domain.IdeaNotification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
