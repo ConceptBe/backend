@@ -1,5 +1,6 @@
 package kr.co.conceptbe.notification.app;
 
+import javax.management.Notification;
 import kr.co.conceptbe.auth.presentation.dto.AuthCredentials;
 import kr.co.conceptbe.idea.domain.Idea;
 import kr.co.conceptbe.idea.domain.event.CreatedIdeaEvent;
@@ -47,8 +48,20 @@ public class NotificationService {
         Idea idea = createdIdeaEvent.idea();
         List<IdeaNotificationSetting> notificationSettings = notificationSettingRepository.findAll();
 
-        List<IdeaNotification> ideaNotifications = notificationTrigger.getNotificationByCreatedIdeaEvent(idea, notificationSettings);
+        List<IdeaNotification> ideaNotifications = notificationTrigger.getNotificationByCreatedIdeaEvent(idea,
+                notificationSettings);
         notificationRepository.saveAll(ideaNotifications);
+    }
+
+    @Transactional
+    public void readNotification(AuthCredentials auth, Long notificationId) {
+        Long memberId = auth.id();
+        IdeaNotification notification = notificationRepository.findByMemberIdAndId(memberId, notificationId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Not Found Notification ID : " + notificationId)
+                );
+        notification.read(memberId);
+        notificationRepository.save(notification);
     }
 
 }

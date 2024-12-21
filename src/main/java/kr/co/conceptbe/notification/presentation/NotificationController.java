@@ -9,6 +9,8 @@ import kr.co.conceptbe.notification.presentation.swagger.NotificationSwagger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +26,24 @@ public class NotificationController implements NotificationSwagger {
 
     @GetMapping
     public ResponseEntity<List<NotificationResponse>> getNotifications(
-            @Parameter(hidden = true) @Auth AuthCredentials auth,
+            @Auth AuthCredentials auth,
             @RequestParam(required = false, defaultValue = "" + Long.MAX_VALUE) Long cursorId
     ) {
         Long limit = 10L;
-        List<NotificationResponse> responses = notificationService.findAllNotifications(auth, cursorId, limit);
+        List<NotificationResponse> responses = notificationService.findAllNotifications(auth, cursorId,
+                limit);
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PutMapping("/{notificationId}/read")
+    public ResponseEntity<Void> readNotification(
+            @Auth AuthCredentials auth,
+            @PathVariable Long notificationId
+    ) {
+        notificationService.readNotification(auth, notificationId);
+
+        return ResponseEntity.ok().build();
     }
 
 }
