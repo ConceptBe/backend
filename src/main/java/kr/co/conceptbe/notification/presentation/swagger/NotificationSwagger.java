@@ -17,4 +17,9 @@ public interface NotificationSwagger {
             Long cursorId
     );
 
+    ResponseEntity<Void> readNotification(
+            @Parameter(hidden = true) AuthCredentials auth,
+            Long notificationId
+    );
+
 }

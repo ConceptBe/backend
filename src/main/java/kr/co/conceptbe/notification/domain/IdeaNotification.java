@@ -44,6 +44,9 @@ public class IdeaNotification extends BaseTimeEntity {
     @Column(nullable = false)
     private String cooperationWay;
 
+    @Column(nullable = false)
+    private boolean isAlreadyRead;
+
     public static IdeaNotification withIdea(Idea idea, IdeaNotificationSetting notificationSetting) {
         Long receiverId = notificationSetting.getMemberId();
         String title = idea.getTitle();
@@ -63,7 +66,8 @@ public class IdeaNotification extends BaseTimeEntity {
                 idea.getId(),
                 joinBadges(branchBadges, Function.identity()),
                 joinBadges(purposes, purpose -> purpose.getPurpose().getName()),
-                cooperationWay
+                cooperationWay,
+                false
         );
     }
 
@@ -98,6 +102,13 @@ public class IdeaNotification extends BaseTimeEntity {
         String[] badgesEach = badges.split(",");
 
         return new ArrayList<>(List.of(badgesEach));
+    }
+
+    public void read(Long memberId) {
+        if (!memberId.equals(this.memberId)) {
+            throw new IllegalArgumentException("다른 계정의 알림을 읽을 수 없습니다.");
+        }
+        isAlreadyRead = true;
     }
 
 }

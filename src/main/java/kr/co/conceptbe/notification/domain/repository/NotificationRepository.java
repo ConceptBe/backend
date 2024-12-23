@@ -1,5 +1,6 @@
 package kr.co.conceptbe.notification.domain.repository;
 
+import java.util.Optional;
 import kr.co.conceptbe.notification.domain.IdeaNotification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,7 @@ public interface NotificationRepository extends JpaRepository<IdeaNotification, 
             LIMIT :limit
             """, nativeQuery = true)
     List<IdeaNotification> findAllNotifications(Long memberId, Long cursorId, Long limit);
+
+    Optional<IdeaNotification> findByMemberIdAndId(Long memberId, Long notificationId);
 
 }
