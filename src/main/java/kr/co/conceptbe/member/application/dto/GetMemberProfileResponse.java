@@ -26,6 +26,10 @@ public record GetMemberProfileResponse(
     @ArraySchema( arraySchema =  @Schema(
         description = "가입목적",
         example ="[\"사이드프로젝트\", \"공모전\"]"))
-    List<String> joinPurposes
+    List<String> joinPurposes,
+    @ArraySchema( arraySchema =  @Schema(
+            description = "목적",
+            example ="[\"쇼핑\", \"금융/앱테크\"]"))
+    List<String> branches
 ) {
 }
