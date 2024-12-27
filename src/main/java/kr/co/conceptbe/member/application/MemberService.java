@@ -67,7 +67,8 @@ public class MemberService {
             member.getWorkingPlace(),
             member.getIntroduce(),
             mapToMemberSkills(member),
-            mapToMemberPurposes(member)
+            mapToMemberPurposes(member),
+            mapToMemberBranches(member)
         );
     }
 
@@ -85,6 +86,12 @@ public class MemberService {
                 skill.getSkillLevel().getName()
             ))
             .collect(Collectors.toList());
+    }
+
+    private List<String> mapToMemberBranches(Member member) {
+        return member.getBranches().stream()
+                .map(branch -> branch.getBranch().getName())
+                .toList();
     }
 
     @Transactional(readOnly = true)
