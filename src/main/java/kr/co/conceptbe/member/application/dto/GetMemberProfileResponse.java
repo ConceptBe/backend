@@ -30,6 +30,6 @@ public record GetMemberProfileResponse(
     @ArraySchema( arraySchema =  @Schema(
             description = "목적",
             example ="[\"쇼핑\", \"금융/앱테크\"]"))
-    List<String> branches
+    List<String> branchList
 ) {
 }
