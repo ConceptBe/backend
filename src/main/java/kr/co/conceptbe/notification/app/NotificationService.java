@@ -4,6 +4,7 @@ import javax.management.Notification;
 import kr.co.conceptbe.auth.presentation.dto.AuthCredentials;
 import kr.co.conceptbe.idea.domain.Idea;
 import kr.co.conceptbe.idea.domain.event.CreatedIdeaEvent;
+import kr.co.conceptbe.idea.domain.persistence.IdeaRepository;
 import kr.co.conceptbe.notification_setting.domain.IdeaNotificationSetting;
 import kr.co.conceptbe.notification_setting.domain.repository.NotificationSettingRepository;
 import kr.co.conceptbe.member.exception.NotFoundAuthCredentialException;
@@ -26,6 +27,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationSettingRepository notificationSettingRepository;
     private final NotificationTrigger notificationTrigger;
+    private final IdeaRepository ideaRepository;
 
     @Transactional(readOnly = true)
     public List<NotificationResponse> findAllNotifications(
@@ -60,7 +62,7 @@ public class NotificationService {
                 .orElseThrow(
                         () -> new IllegalArgumentException("Not Found Notification ID : " + notificationId)
                 );
-        notification.read(memberId);
+        notification.read(memberId, ideaRepository::findById);
         notificationRepository.save(notification);
     }
 
