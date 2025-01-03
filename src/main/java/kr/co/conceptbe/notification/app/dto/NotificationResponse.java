@@ -9,7 +9,8 @@ public record NotificationResponse(
         Long feedId,
         String title,
         String createAt,
-        List<String> badges
+        List<String> badges,
+        boolean isAlreadyRead
 ) {
 
     public static NotificationResponse from(IdeaNotification notification) {
@@ -22,7 +23,8 @@ public record NotificationResponse(
                 notification.getIdeaId(),
                 notification.getTitle(),
                 notification.getCreatedAt().toString(),
-                ideaBranches
+                ideaBranches,
+                notification.isAlreadyRead()
         );
     }
 

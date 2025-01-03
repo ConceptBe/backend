@@ -1,6 +1,7 @@
 package kr.co.conceptbe.notification.domain;
 
 import jakarta.persistence.*;
+import java.util.Optional;
 import kr.co.conceptbe.common.entity.base.BaseTimeEntity;
 import kr.co.conceptbe.idea.domain.Idea;
 import kr.co.conceptbe.idea.domain.IdeaBranch;
@@ -104,10 +105,16 @@ public class IdeaNotification extends BaseTimeEntity {
         return new ArrayList<>(List.of(badgesEach));
     }
 
-    public void read(Long memberId) {
+    public void read(Long memberId, Function<Long, Optional<Idea>> getIdea) {
         if (!memberId.equals(this.memberId)) {
             throw new IllegalArgumentException("다른 계정의 알림을 읽을 수 없습니다.");
         }
+
+        Optional<Idea> idea = getIdea.apply(this.ideaId);
+        if (idea.isEmpty()) {
+            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+        }
+
         isAlreadyRead = true;
     }
 
